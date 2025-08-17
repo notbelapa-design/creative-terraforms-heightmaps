@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Spanish Economic Data Map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<style>
+  html, body, #map {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  .info {
+    padding: 6px 8px;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+  }
+  .legend {
+    line-height: 18px;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+const data = [
+  {name:"Andalusia", lat:37.3891, lon:-5.9845, gdp:199952, gdp_pc:23218},
+  {name:"Aragon", lat:41.6488, lon:-0.8891, gdp:46674, gdp_pc:34658},
+  {name:"Asturias", lat:43.3619, lon:-5.8494, gdp:28326, gdp_pc:28130},
+  {name:"Cantabria", lat:43.4623, lon:-3.8099, gdp:16777, gdp_pc:28461},
+  {name:"Castile and León", lat:41.6529, lon:-4.7284, gdp:70876, gdp_pc:29698},
+  {name:"Castilla-La Mancha", lat:39.8628, lon:-4.0273, gdp:53929, gdp_pc:25758},
+  {name:"Canary Islands", lat:28.4636, lon:-16.2518, gdp:54194, gdp_pc:24345},
+  {name:"Catalonia", lat:41.3851, lon:2.1734, gdp:281845, gdp_pc:35325},
+  {name:"Ceuta", lat:35.8894, lon:-5.3213, gdp:1889, gdp_pc:22751},
+  {name:"Extremadura", lat:38.9170, lon:-6.3450, gdp:24870, gdp_pc:23604},
+  {name:"Galicia", lat:42.8782, lon:-8.5448, gdp:77356, gdp_pc:28644},
+  {name:"Balearic Islands", lat:39.5696, lon:2.6502, gdp:42084, gdp_pc:34381},
+  {name:"La Rioja", lat:42.4660, lon:-2.4456, gdp:10618, gdp_pc:32828},
+  {name:"Madrid", lat:40.4168, lon:-3.7038, gdp:293069, gdp_pc:42198},
+  {name:"Melilla", lat:35.2923, lon:-2.9381, gdp:1750, gdp_pc:20479},
+  {name:"Murcia", lat:37.9847, lon:-1.1307, gdp:40386, gdp_pc:25887},
+  {name:"Navarre", lat:42.8125, lon:-1.6458, gdp:25041, gdp_pc:37088},
+  {name:"Basque Country", lat:43.2630, lon:-2.9350, gdp:87857, gdp_pc:39547},
+  {name:"Valencian Community", lat:39.4699, lon:-0.3763, gdp:139420, gdp_pc:26453}
+];
+
+function getColor(value, metric) {
+  let min, max, v;
+  if (metric === 'gdp_pc') {
+    min = 20000; max = 43000;
+    v = value;
+  } else {
+    min = 2000; max = 300000;
+    v = value;
+  }
+  const ratio = (v - min) / (max - min);
+  const r = Math.floor(255 * ratio);
+  const g = Math.floor(255 * (1 - ratio));
+  return `rgb(${r},${g},0)`;
+}
+
+function getRadius(value, metric) {
+  let min, max, v;
+  if (metric === 'gdp_pc') {
+    min = 20000; max = 43000;
+    v = value;
+  } else {
+    min = 2000; max = 300000;
+    v = value;
+  }
+  const ratio = (v - min) / (max - min);
+  return 10000 + ratio * 40000;
+}
+
+const map = L.map('map').setView([40.0, -3.7], 5);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 8,
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+const metricSelect = document.createElement('select');
+metricSelect.innerHTML = `
+  <option value="gdp">GDP (Millions €)</option>
+  <option value="gdp_pc">GDP per Capita (€)</option>
+`;
+metricSelect.style.position = 'absolute';
+metricSelect.style.top = '10px';
+metricSelect.style.right = '10px';
+metricSelect.style.zIndex = 1000;
+metricSelect.style.padding = '5px';
+document.body.appendChild(metricSelect);
+
+let circles = [];
+function drawMap(metric) {
+  circles.forEach(c => map.removeLayer(c));
+  circles = [];
+  data.forEach(item => {
+    const value = metric === 'gdp' ? item.gdp : item.gdp_pc;
+    const circle = L.circle([item.lat, item.lon], {
+      color: getColor(value, metric),
+      fillColor: getColor(value, metric),
+      fillOpacity: 0.6,
+      radius: getRadius(value, metric)
+    }).addTo(map);
+    circle.bindPopup(`<b>${item.name}</b><br>${metric === 'gdp' ? 'GDP: €' + item.gdp.toLocaleString() + 'M' : 'GDP per Capita: €' + item.gdp_pc.toLocaleString()}`);
+    circles.push(circle);
+  });
+}
+
+metricSelect.addEventListener('change', () => {
+  drawMap(metricSelect.value);
+});
+drawMap('gdp');
+</script>
+</body>
+</html>
