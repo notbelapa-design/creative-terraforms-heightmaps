@@ -1,121 +1,131 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Spanish Economic Data Map</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<style>
-  html, body, #map {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  .info {
-    padding: 6px 8px;
-    background: white;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
-  }
-  .legend {
-    line-height: 18px;
-    color: #555;
-  }
-</style>
+    <meta charset='utf-8' />
+    <title>Spain Economic Map: GDP & Growth</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css' />
+    <style>
+        #map { height: 600px; }
+        .info-box { background: rgba(255, 255, 255, 0.9); padding: 10px; margin-top: 10px; border-radius: 4px; width: 320px; }
+    </style>
 </head>
 <body>
-<div id="map"></div>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-const data = [
-  {name:"Andalusia", lat:37.3891, lon:-5.9845, gdp:199952, gdp_pc:23218},
-  {name:"Aragon", lat:41.6488, lon:-0.8891, gdp:46674, gdp_pc:34658},
-  {name:"Asturias", lat:43.3619, lon:-5.8494, gdp:28326, gdp_pc:28130},
-  {name:"Cantabria", lat:43.4623, lon:-3.8099, gdp:16777, gdp_pc:28461},
-  {name:"Castile and León", lat:41.6529, lon:-4.7284, gdp:70876, gdp_pc:29698},
-  {name:"Castilla-La Mancha", lat:39.8628, lon:-4.0273, gdp:53929, gdp_pc:25758},
-  {name:"Canary Islands", lat:28.4636, lon:-16.2518, gdp:54194, gdp_pc:24345},
-  {name:"Catalonia", lat:41.3851, lon:2.1734, gdp:281845, gdp_pc:35325},
-  {name:"Ceuta", lat:35.8894, lon:-5.3213, gdp:1889, gdp_pc:22751},
-  {name:"Extremadura", lat:38.9170, lon:-6.3450, gdp:24870, gdp_pc:23604},
-  {name:"Galicia", lat:42.8782, lon:-8.5448, gdp:77356, gdp_pc:28644},
-  {name:"Balearic Islands", lat:39.5696, lon:2.6502, gdp:42084, gdp_pc:34381},
-  {name:"La Rioja", lat:42.4660, lon:-2.4456, gdp:10618, gdp_pc:32828},
-  {name:"Madrid", lat:40.4168, lon:-3.7038, gdp:293069, gdp_pc:42198},
-  {name:"Melilla", lat:35.2923, lon:-2.9381, gdp:1750, gdp_pc:20479},
-  {name:"Murcia", lat:37.9847, lon:-1.1307, gdp:40386, gdp_pc:25887},
-  {name:"Navarre", lat:42.8125, lon:-1.6458, gdp:25041, gdp_pc:37088},
-  {name:"Basque Country", lat:43.2630, lon:-2.9350, gdp:87857, gdp_pc:39547},
-  {name:"Valencian Community", lat:39.4699, lon:-0.3763, gdp:139420, gdp_pc:26453}
+    <h2>Spain Economic Map</h2>
+    <p>Select a metric to visualize: GDP, GDP per Capita, or Growth Rates.</p>
+    <select id='metricSelect'></select>
+    <div id='map'></div>
+    <div id='insights' class='info-box'></div>
+    <script src='https://unpkg.com/leaflet@1.7.1/dist/leaflet.js'></script>
+    <script src='https://unpkg.com/leaflet.heat/dist/leaflet-heat.js'></script>
+    <script>
+        const data = [
+  {"name": "Andalusia", "lat": 37.3886, "lon": -5.9823, "gdp": 199952, "gdp_pc": 23218, "gdp2019": 166479, "gdp2020": 150453, "gdp2021": 166296, "gdp2022": 183636, "gdp2023": 199952, "growth19_23": 20.11, "growth20_21": 10.53},
+  {"name": "Aragon", "lat": 41.6561, "lon": -0.8773, "gdp": 46674, "gdp_pc": 34658, "gdp2019": 38465, "gdp2020": 35956, "gdp2021": 38782, "gdp2022": 43454, "gdp2023": 46674, "growth19_23": 21.34, "growth20_21": 7.86},
+  {"name": "Asturias", "lat": 43.3614, "lon": -5.8593, "gdp": 28326, "gdp_pc": 28177, "gdp2019": 23667, "gdp2020": 21376, "gdp2021": 23618, "gdp2022": 26481, "gdp2023": 28326, "growth19_23": 19.69, "growth20_21": 10.49},
+  {"name": "Balearic Islands", "lat": 39.5696, "lon": 2.6502, "gdp": 42084, "gdp_pc": 34381, "gdp2019": 34351, "gdp2020": 26669, "gdp2021": 30512, "gdp2022": 37165, "gdp2023": 42084, "growth19_23": 22.51, "growth20_21": 14.41},
+  {"name": "Basque Country", "lat": 43.263, "lon": -2.935, "gdp": 87857, "gdp_pc": 39547, "gdp2019": 74000, "gdp2020": 66673, "gdp2021": 72513, "gdp2022": 80481, "gdp2023": 87857, "growth19_23": 18.73, "growth20_21": 8.76},
+  {"name": "Canary Islands", "lat": 28.1235, "lon": -15.4363, "gdp": 54194, "gdp_pc": 24527, "gdp2019": 45767, "gdp2020": 37587, "gdp2021": 41407, "gdp2022": 48551, "gdp2023": 54194, "growth19_23": 18.41, "growth20_21": 10.16},
+  {"name": "Cantabria", "lat": 43.4623, "lon": -3.8099, "gdp": 16777, "gdp_pc": 29459, "gdp2019": 14274, "gdp2020": 12991, "gdp2021": 14207, "gdp2022": 15540, "gdp2023": 16777, "growth19_23": 17.54, "growth20_21": 9.36},
+  {"name": "Castile and León", "lat": 42.6, "lon": -5.57, "gdp": 70876, "gdp_pc": 29963, "gdp2019": 59649, "gdp2020": 54795, "gdp2021": 59466, "gdp2022": 65121, "gdp2023": 70876, "growth19_23": 18.82, "growth20_21": 8.52},
+  {"name": "Castilla-La Mancha", "lat": 39.8636, "lon": -4.0273, "gdp": 53929, "gdp_pc": 26613, "gdp2019": 43393, "gdp2020": 40254, "gdp2021": 44124, "gdp2022": 49676, "gdp2023": 53929, "growth19_23": 24.28, "growth20_21": 9.61},
+  {"name": "Catalonia", "lat": 41.3874, "lon": 2.1686, "gdp": 281845, "gdp_pc": 35325, "gdp2019": 240166, "gdp2020": 214857, "gdp2021": 234820, "gdp2022": 258686, "gdp2023": 281845, "growth19_23": 17.35, "growth20_21": 9.29},
+  {"name": "Extremadura", "lat": 38.986, "lon": -6.095, "gdp": 24870, "gdp_pc": 24692, "gdp2019": 21166, "gdp2020": 19497, "gdp2021": 21552, "gdp2022": 23141, "gdp2023": 24870, "growth19_23": 17.5, "growth20_21": 10.54},
+  {"name": "Galicia", "lat": 42.5751, "lon": -8.1339, "gdp": 77356, "gdp_pc": 28798, "gdp2019": 64502, "gdp2020": 59007, "gdp2021": 64387, "gdp2022": 71366, "gdp2023": 77356, "growth19_23": 19.93, "growth20_21": 9.12},
+  {"name": "Madrid", "lat": 40.4168, "lon": -3.7038, "gdp": 293069, "gdp_pc": 42198, "gdp2019": 243889, "gdp2020": 221062, "gdp2021": 239838, "gdp2022": 267579, "gdp2023": 293069, "growth19_23": 20.16, "growth20_21": 8.49},
+  {"name": "Murcia", "lat": 37.9922, "lon": -1.1307, "gdp": 40386, "gdp_pc": 26350, "gdp2019": 33001, "gdp2020": 30440, "gdp2021": 33604, "gdp2022": 37493, "gdp2023": 40386, "growth19_23": 22.38, "growth20_21": 10.39},
+  {"name": "Navarre", "lat": 42.8125, "lon": -1.6458, "gdp": 25041, "gdp_pc": 37088, "gdp2019": 21070, "gdp2020": 19161, "gdp2021": 20821, "gdp2022": 23211, "gdp2023": 25041, "growth19_23": 18.85, "growth20_21": 8.66},
+  {"name": "Valencian Community", "lat": 39.484, "lon": -0.7542, "gdp": 139420, "gdp_pc": 26453, "gdp2019": 116589, "gdp2020": 106067, "gdp2021": 116387, "gdp2022": 127590, "gdp2023": 139420, "growth19_23": 19.58, "growth20_21": 9.73},
+  {"name": "La Rioja", "lat": 42.465, "lon": -2.4487, "gdp": 10618, "gdp_pc": 33284, "gdp2019": 8890, "gdp2020": 8187, "gdp2021": 8736, "gdp2022": 9713, "gdp2023": 10618, "growth19_23": 19.44, "growth20_21": 6.71},
+  {"name": "Ceuta", "lat": 35.8898, "lon": -5.3213, "gdp": 1889, "gdp_pc": 23698, "gdp2019": 1660, "gdp2020": 1536, "gdp2021": 1634, "gdp2022": 1764, "gdp2023": 1889, "growth19_23": 13.8, "growth20_21": 6.38},
+  {"name": "Melilla", "lat": 35.2923, "lon": -2.9381, "gdp": 1750, "gdp_pc": 20479, "gdp2019": 1560, "gdp2020": 1452, "gdp2021": 1534, "gdp2022": 1654, "gdp2023": 1750, "growth19_23": 12.18, "growth20_21": 5.65}
 ];
-
-function getColor(value, metric) {
-  let min, max, v;
-  if (metric === 'gdp_pc') {
-    min = 20000; max = 43000;
-    v = value;
-  } else {
-    min = 2000; max = 300000;
-    v = value;
-  }
-  const ratio = (v - min) / (max - min);
-  const r = Math.floor(255 * ratio);
-  const g = Math.floor(255 * (1 - ratio));
-  return `rgb(${r},${g},0)`;
-}
-
-function getRadius(value, metric) {
-  let min, max, v;
-  if (metric === 'gdp_pc') {
-    min = 20000; max = 43000;
-    v = value;
-  } else {
-    min = 2000; max = 300000;
-    v = value;
-  }
-  const ratio = (v - min) / (max - min);
-  return 10000 + ratio * 40000;
-}
-
-const map = L.map('map').setView([40.0, -3.7], 5);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 8,
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
-
-const metricSelect = document.createElement('select');
-metricSelect.innerHTML = `
-  <option value="gdp">GDP (Millions €)</option>
-  <option value="gdp_pc">GDP per Capita (€)</option>
-`;
-metricSelect.style.position = 'absolute';
-metricSelect.style.top = '10px';
-metricSelect.style.right = '10px';
-metricSelect.style.zIndex = 1000;
-metricSelect.style.padding = '5px';
-document.body.appendChild(metricSelect);
-
-let circles = [];
-function drawMap(metric) {
-  circles.forEach(c => map.removeLayer(c));
-  circles = [];
-  data.forEach(item => {
-    const value = metric === 'gdp' ? item.gdp : item.gdp_pc;
-    const circle = L.circle([item.lat, item.lon], {
-      color: getColor(value, metric),
-      fillColor: getColor(value, metric),
-      fillOpacity: 0.6,
-      radius: getRadius(value, metric)
-    }).addTo(map);
-    circle.bindPopup(`<b>${item.name}</b><br>${metric === 'gdp' ? 'GDP: €' + item.gdp.toLocaleString() + 'M' : 'GDP per Capita: €' + item.gdp_pc.toLocaleString()}`);
-    circles.push(circle);
-  });
-}
-
-metricSelect.addEventListener('change', () => {
-  drawMap(metricSelect.value);
-});
-drawMap('gdp');
-</script>
+        const metricOptions = [["gdp", "GDP 2023 (M€)", "M€"], ["gdp_pc", "GDP per Capita 2023 (€)", "€"], ["growth19_23", "GDP Growth 2019-23 (%)", "%"], ["growth20_21", "GDP Growth 2020-21 (%)", "%"]];
+        const map = L.map('map').setView([40.0, -3.7], 6);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        const metricSelect = document.getElementById('metricSelect');
+        metricOptions.forEach(opt => {
+            const option = document.createElement('option');
+            option.value = opt[0];
+            option.text = opt[1];
+            metricSelect.appendChild(option);
+        });
+        let markers = [];
+        let heatLayer;
+        function getColor(value, metricKey) {
+            const values = data.map(d => d[metricKey]);
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const ratio = (value - min) / (max - min);
+            const hue = (120 - 120 * ratio);
+            return `hsl(${hue}, 70%, 50%)`;
+        }
+        function getRadius(value, metricKey) {
+            const values = data.map(d => d[metricKey]);
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const ratio = (value - min) / (max - min);
+            return 8 + ratio * 32;
+        }
+        function updateInsights(metricKey) {
+            const insightsDiv = document.getElementById('insights');
+            if(metricKey === 'growth19_23') {
+                insightsDiv.innerHTML = '<b>Insights:</b><br>' +
+                '• Castile-La Mancha shows the highest 5-year GDP growth (~24%).<br>' +
+                '• Balearic Islands and Murcia also exceed 22% growth, reflecting tourism recovery and economic expansion.<br>' +
+                '• Ceuta and Melilla grew less than 14%, indicating slower post-pandemic recovery.<br>' +
+                'Hover over circles for exact values.';
+            } else if(metricKey === 'growth20_21') {
+                insightsDiv.innerHTML = '<b>Insights:</b><br>' +
+                '• 2020-21 growth illustrates pandemic rebound: Balearic Islands experienced over 14% growth as tourism returned.<br>' +
+                '• Extremadura and Andalusia show double-digit growth, while Ceuta and Melilla lag behind.<br>' +
+                '• Use this metric to see how strongly each region recovered in the year after the pandemic slump.';
+            } else if(metricKey === 'gdp_pc') {
+                insightsDiv.innerHTML = '<b>Insights:</b><br>' +
+                '• Madrid and the Basque Country have the highest GDP per capita, exceeding €39,000.<br>' +
+                '• Southern regions like Andalusia, Extremadura and the Canary Islands have much lower GDP per capita.<br>' +
+                '• Wealth disparities persist across Spain, with a clear north-south divide.';
+            } else {
+                insightsDiv.innerHTML = '<b>Insights:</b><br>' +
+                '• Madrid and Catalonia dominate in total GDP due to large populations and diversified economies.<br>' +
+                '• Smaller regions like La Rioja, Ceuta and Melilla contribute a fraction of national output.<br>' +
+                '• Select other metrics for more nuanced comparisons.';
+            }
+        }
+        function drawMap() {
+            const metricKey = metricSelect.value || 'gdp';
+            markers.forEach(m => m.remove());
+            markers = [];
+            if(heatLayer) { heatLayer.remove(); heatLayer = null; }
+            if(metricKey === 'growth19_23') {
+                const heatData = data.map(d => [d.lat, d.lon, d.growth19_23 / 30]);
+                heatLayer = L.heatLayer(heatData, {
+                    radius: 25,
+                    blur: 15,
+                    maxZoom: 7,
+                    gradient: { 0.0: 'blue', 0.5: 'lime', 1.0: 'red' }
+                }).addTo(map);
+            }
+            data.forEach(item => {
+                const value = item[metricKey];
+                const circle = L.circleMarker([item.lat, item.lon], {
+                    radius: getRadius(value, metricKey),
+                    color: getColor(value, metricKey),
+                    fillOpacity: 0.7,
+                    weight: 1
+                }).addTo(map);
+                const suffix = metricKey === 'gdp' ? 'M€' : (metricKey === 'gdp_pc' ? '€' : '%');
+                const displayValue = value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+                const metricLabel = metricOptions.find(o => o[0] === metricKey)[1];
+                circle.bindPopup(`<strong>${item.name}</strong><br>${metricLabel}: ${displayValue} ${suffix}`);
+                markers.push(circle);
+            });
+            updateInsights(metricKey);
+        }
+        metricSelect.addEventListener('change', drawMap);
+        drawMap();
+    </script>
 </body>
 </html>
