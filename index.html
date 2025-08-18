@@ -35,6 +35,8 @@
     "growth20_21": 10.53,
     "rd_pc": 264.8,
     "rd_growth": 20.9
+    , "house_price": 2500
+    , "living_index": 58
   },
   {
     "name": "Aragon",
@@ -51,6 +53,8 @@
     "growth20_21": 7.86,
     "rd_pc": 402.7,
     "rd_growth": 21.6
+    , "house_price": 1500
+    , "living_index": 57
   },
   {
     "name": "Asturias",
@@ -67,6 +71,8 @@
     "growth20_21": 10.49,
     "rd_pc": 276.3,
     "rd_growth": 28.1
+    , "house_price": 1300
+    , "living_index": 57
   },
   {
     "name": "Balearic Islands",
@@ -83,6 +89,8 @@
     "growth20_21": 14.41,
     "rd_pc": 163.1,
     "rd_growth": 22.4
+    , "house_price": 4485
+    , "living_index": 65
   },
   {
     "name": "Basque Country",
@@ -99,6 +107,8 @@
     "growth20_21": 8.76,
     "rd_pc": 925.5,
     "rd_growth": 16.3
+    , "house_price": 3500
+    , "living_index": 65
   },
   {
     "name": "Canary Islands",
@@ -115,6 +125,8 @@
     "growth20_21": 10.16,
     "rd_pc": 138.1,
     "rd_growth": 13.9
+    , "house_price": 2000
+    , "living_index": 56
   },
   {
     "name": "Cantabria",
@@ -131,6 +143,8 @@
     "growth20_21": 9.36,
     "rd_pc": 273.1,
     "rd_growth": 16.6
+    , "house_price": 1700
+    , "living_index": 58
   },
   {
     "name": "Castile and León",
@@ -147,6 +161,8 @@
     "growth20_21": 8.52,
     "rd_pc": 403.0,
     "rd_growth": 11.1
+    , "house_price": 1400
+    , "living_index": 55
   },
   {
     "name": "Castilla-La Mancha",
@@ -163,6 +179,8 @@
     "growth20_21": 9.61,
     "rd_pc": 158.3,
     "rd_growth": 6.0
+    , "house_price": 1231
+    , "living_index": 53
   },
   {
     "name": "Catalonia",
@@ -179,6 +197,8 @@
     "growth20_21": 9.29,
     "rd_pc": 668.7,
     "rd_growth": 11.1
+    , "house_price": 7400
+    , "living_index": 68
   },
   {
     "name": "Extremadura",
@@ -195,6 +215,8 @@
     "growth20_21": 10.54,
     "rd_pc": 170.2,
     "rd_growth": 13.5
+    , "house_price": 1000
+    , "living_index": 52
   },
   {
     "name": "Galicia",
@@ -211,6 +233,8 @@
     "growth20_21": 9.12,
     "rd_pc": 355.7,
     "rd_growth": 28.2
+    , "house_price": 1300
+    , "living_index": 55
   },
   {
     "name": "Madrid",
@@ -227,6 +251,8 @@
     "growth20_21": 8.49,
     "rd_pc": 862.3,
     "rd_growth": 17.7
+    , "house_price": 4281
+    , "living_index": 68
   },
   {
     "name": "Murcia",
@@ -243,6 +269,8 @@
     "growth20_21": 10.39,
     "rd_pc": 271.6,
     "rd_growth": 10.1
+    , "house_price": 1200
+    , "living_index": 56
   },
   {
     "name": "Navarre",
@@ -259,6 +287,8 @@
     "growth20_21": 8.66,
     "rd_pc": 658.5,
     "rd_growth": 9.0
+    , "house_price": 2500
+    , "living_index": 64
   },
   {
     "name": "Valencian Community",
@@ -275,6 +305,8 @@
     "growth20_21": 9.73,
     "rd_pc": 321.9,
     "rd_growth": 15.3
+    , "house_price": 1640
+    , "living_index": 60
   },
   {
     "name": "La Rioja",
@@ -291,6 +323,8 @@
     "growth20_21": 6.71,
     "rd_pc": 299.1,
     "rd_growth": 17.7
+    , "house_price": 1400
+    , "living_index": 55
   },
   {
     "name": "Ceuta",
@@ -307,6 +341,8 @@
     "growth20_21": 6.38,
     "rd_pc": 51.1,
     "rd_growth": 6.5
+    , "house_price": 1800
+    , "living_index": 50
   },
   {
     "name": "Melilla",
@@ -323,9 +359,20 @@
     "growth20_21": 5.65,
     "rd_pc": 73.7,
     "rd_growth": 4.2
+    , "house_price": 1500
+    , "living_index": 50
   }
 ];
-        const metricOptions = [["gdp", "GDP 2023 (M€)", "M€"], ["gdp_pc", "GDP per Capita 2023 (€)", "€"], ["growth19_23", "GDP Growth 2019-23 (%)", "%"], ["growth20_21", "GDP Growth 2020-21 (%)", "%"], ["rd_pc", "R&D per Capita 2023 (€)", "€"], ["rd_growth", "R&D Expenditure Growth 2023 vs 2022 (%)", "%"]];
+        const metricOptions = [
+            ["gdp", "GDP 2023 (M€)", "M€"],
+            ["gdp_pc", "GDP per Capita 2023 (€)", "€"],
+            ["growth19_23", "GDP Growth 2019-23 (%)", "%"],
+            ["growth20_21", "GDP Growth 2020-21 (%)", "%"],
+            ["rd_pc", "R&D per Capita 2023 (€)", "€"],
+            ["rd_growth", "R&D Expenditure Growth 2023 vs 2022 (%)", "%"],
+            ["house_price", "Housing Price per m² (€)", "€"],
+            ["living_index", "Cost of Living Index", ""]
+        ];
         const map = L.map('map').setView([40.0, -3.7], 6);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors'
@@ -358,37 +405,51 @@
             const insightsDiv = document.getElementById('insights');
             if(metricKey === 'growth19_23') {
                 insightsDiv.innerHTML = '<b>Insights:</b><br>' +
-                '\u2022 Castile-La Mancha shows the highest 5-year GDP growth (~24%).<br>' +
-                '\u2022 Balearic Islands and Murcia also exceed 22% growth, reflecting tourism recovery and economic expansion.<br>' +
-                '\u2022 Ceuta and Melilla grew less than 14%, indicating slower post-pandemic recovery.<br>' +
+                '• Castile-La Mancha shows the highest 5-year GDP growth (~24%).<br>' +
+                '• Balearic Islands and Murcia also exceed 22% growth, reflecting tourism recovery and economic expansion.<br>' +
+                '• Ceuta and Melilla grew less than 14%, indicating slower post-pandemic recovery.<br>' +
                 'Hover over circles for exact values.';
             } else if(metricKey === 'growth20_21') {
                 insightsDiv.innerHTML = '<b>Insights:</b><br>' +
-                '\u2022 2020-21 growth illustrates pandemic rebound: Balearic Islands experienced over 14% growth as tourism returned.<br>' +
-                '\u2022 Extremadura and Andalusia show double-digit growth, while Ceuta and Melilla lag behind.<br>' +
-                '\u2022 Use this metric to see how strongly each region recovered in the year after the pandemic slump.';
+                '• 2020-21 growth illustrates pandemic rebound: Balearic Islands experienced over 14% growth as tourism returned.<br>' +
+                '• Extremadura and Andalusia show double-digit growth, while Ceuta and Melilla lag behind.<br>' +
+                '• Use this metric to see how strongly each region recovered in the year after the pandemic slump.';
             } else if(metricKey === 'gdp_pc') {
                 insightsDiv.innerHTML = '<b>Insights:</b><br>' +
-                '\u2022 Madrid and the Basque Country have the highest GDP per capita, exceeding \u20ac39,000.<br>' +
-                '\u2022 Southern regions like Andalusia, Extremadura and the Canary Islands have much lower GDP per capita.<br>' +
-                '\u2022 Wealth disparities persist across Spain, with a clear north-south divide.';
+                '• Madrid and the Basque Country have the highest GDP per capita, exceeding €39,000.<br>' +
+                '• Southern regions like Andalusia, Extremadura and the Canary Islands have much lower GDP per capita.<br>' +
+                '• Wealth disparities persist across Spain, with a clear north-south divide.';
             } else if(metricKey === 'rd_pc') {
                 insightsDiv.innerHTML = '<b>Insights:</b><br>' +
-                '\u2022 The Basque Country and Madrid lead R&D spending per person, with over \u20ac860 per inhabitant.<br>' +
-                '\u2022 High R&D per capita reflects strong investment in innovation and science in northern regions.<br>' +
-                '\u2022 Ceuta, Melilla and the Canary Islands invest the least in R&D per inhabitant.<br>' +
+                '• The Basque Country and Madrid lead R&D spending per person, with over €860 per inhabitant.<br>' +
+                '• High R&D per capita reflects strong investment in innovation and science in northern regions.<br>' +
+                '• Ceuta, Melilla and the Canary Islands invest the least in R&D per inhabitant.<br>' +
                 'Hover over circles for exact values.';
             } else if(metricKey === 'rd_growth') {
                 insightsDiv.innerHTML = '<b>Insights:</b><br>' +
-                '\u2022 Galicia and Asturias saw the largest increases in R&D expenditure in 2023, both above 28%.<br>' +
-                '\u2022 Balearic Islands also recorded strong growth (~22%).<br>' +
-                '\u2022 Melilla, Castilla-La Mancha and Ceuta posted growth below 7%, signalling slower research investment.<br>' +
+                '• Galicia and Asturias saw the largest increases in R&D expenditure in 2023, both above 28%.<br>' +
+                '• Balearic Islands also recorded strong growth (~22%).<br>' +
+                '• Melilla, Castilla-La Mancha and Ceuta posted growth below 7%, signalling slower research investment.<br>' +
                 'This metric shows momentum in innovation investment across regions.';
+            } else if(metricKey === 'house_price') {
+                // Insights for housing price per square metre
+                insightsDiv.innerHTML = '<b>Insights:</b><br>' +
+                    '• The Balearic Islands and Madrid have the most expensive housing, with average prices per m² exceeding about €4,280.<br>' +
+                    '• Catalonia (especially Barcelona) commands the highest prices in Spain, with homes surpassing €7,400 per m².<br>' +
+                    '• Castilla-La Mancha remains the most affordable region, with prices close to €1,231 per m², while Galicia and Extremadura also offer relatively low costs.<br>' +
+                    '• These disparities highlight how tourism and urban concentration drive property values; inland regions remain far cheaper than coastal or capital areas.';
+            } else if(metricKey === 'living_index') {
+                // Insights for cost of living index
+                insightsDiv.innerHTML = '<b>Insights:</b><br>' +
+                    '• Major metropolitan regions like Madrid and Catalonia register the highest cost of living, reflecting expensive housing, dining and services.<br>' +
+                    '• The Basque Country is also pricey; San Sebastián is singled out as one of the most expensive cities in Spain.<br>' +
+                    '• By contrast, Murcia and Galicia are among the most affordable regions: housing is significantly cheaper and daily expenses are lower.<br>' +
+                    '• Andalusia, Castilla‑La Mancha and Extremadura offer a relatively low cost of living, making them attractive for budget‑conscious residents.';
             } else {
                 insightsDiv.innerHTML = '<b>Insights:</b><br>' +
-                '\u2022 Madrid and Catalonia dominate in total GDP due to large populations and diversified economies.<br>' +
-                '\u2022 Smaller regions like La Rioja, Ceuta and Melilla contribute a fraction of national output.<br>' +
-                '\u2022 Select other metrics for more nuanced comparisons.';
+                '• Madrid and Catalonia dominate in total GDP due to large populations and diversified economies.<br>' +
+                '• Smaller regions like La Rioja, Ceuta and Melilla contribute a fraction of national output.<br>' +
+                '• Select other metrics for more nuanced comparisons.';
             }
         }
         function drawMap() {
@@ -414,9 +475,15 @@
                     weight: 1
                 }).addTo(map);
                 let suffix;
-                if(metricKey === 'gdp') { suffix = 'M€'; }
-                else if(metricKey === 'gdp_pc' || metricKey === 'rd_pc') { suffix = '€'; }
-                else { suffix = '%'; }
+                if (metricKey === 'gdp') {
+                    suffix = 'M€';
+                } else if (metricKey === 'gdp_pc' || metricKey === 'rd_pc' || metricKey === 'house_price') {
+                    suffix = '€';
+                } else if (metricKey === 'living_index') {
+                    suffix = '';
+                } else {
+                    suffix = '%';
+                }
                 const displayValue = value.toLocaleString(undefined, { maximumFractionDigits: 2 });
                 const metricLabel = metricOptions.find(o => o[0] === metricKey)[1];
                 circle.bindPopup(`<strong>${item.name}</strong><br>${metricLabel}: ${displayValue} ${suffix}`);
