@@ -2,17 +2,17 @@
 <html>
 <head>
     <meta charset='utf-8' />
-    <title>Spain Economic Map: GDP & Growth</title>
+    <title>Spain Economic Map: GDP, Growth & R&D</title>
     <meta name='viewport' content='width=device-width, initial-scale=1.0' />
     <link rel='stylesheet' href='https://unpkg.com/leaflet@1.7.1/dist/leaflet.css' />
     <style>
         #map { height: 600px; }
-        .info-box { background: rgba(255, 255, 255, 0.9); padding: 10px; margin-top: 10px; border-radius: 4px; width: 320px; }
+        .info-box { background: rgba(255, 255, 255, 0.9); padding: 10px; margin-top: 10px; border-radius: 4px; width: 350px; }
     </style>
 </head>
 <body>
     <h2>Spain Economic Map</h2>
-    <p>Select a metric to visualize: GDP, GDP per Capita, or Growth Rates.</p>
+    <p>Select a metric to visualize: GDP, GDP per Capita, Growth Rates, or R&D metrics.</p>
     <select id='metricSelect'></select>
     <div id='map'></div>
     <div id='insights' class='info-box'></div>
@@ -20,27 +20,312 @@
     <script src='https://unpkg.com/leaflet.heat/dist/leaflet-heat.js'></script>
     <script>
         const data = [
-  {"name": "Andalusia", "lat": 37.3886, "lon": -5.9823, "gdp": 199952, "gdp_pc": 23218, "gdp2019": 166479, "gdp2020": 150453, "gdp2021": 166296, "gdp2022": 183636, "gdp2023": 199952, "growth19_23": 20.11, "growth20_21": 10.53},
-  {"name": "Aragon", "lat": 41.6561, "lon": -0.8773, "gdp": 46674, "gdp_pc": 34658, "gdp2019": 38465, "gdp2020": 35956, "gdp2021": 38782, "gdp2022": 43454, "gdp2023": 46674, "growth19_23": 21.34, "growth20_21": 7.86},
-  {"name": "Asturias", "lat": 43.3614, "lon": -5.8593, "gdp": 28326, "gdp_pc": 28177, "gdp2019": 23667, "gdp2020": 21376, "gdp2021": 23618, "gdp2022": 26481, "gdp2023": 28326, "growth19_23": 19.69, "growth20_21": 10.49},
-  {"name": "Balearic Islands", "lat": 39.5696, "lon": 2.6502, "gdp": 42084, "gdp_pc": 34381, "gdp2019": 34351, "gdp2020": 26669, "gdp2021": 30512, "gdp2022": 37165, "gdp2023": 42084, "growth19_23": 22.51, "growth20_21": 14.41},
-  {"name": "Basque Country", "lat": 43.263, "lon": -2.935, "gdp": 87857, "gdp_pc": 39547, "gdp2019": 74000, "gdp2020": 66673, "gdp2021": 72513, "gdp2022": 80481, "gdp2023": 87857, "growth19_23": 18.73, "growth20_21": 8.76},
-  {"name": "Canary Islands", "lat": 28.1235, "lon": -15.4363, "gdp": 54194, "gdp_pc": 24527, "gdp2019": 45767, "gdp2020": 37587, "gdp2021": 41407, "gdp2022": 48551, "gdp2023": 54194, "growth19_23": 18.41, "growth20_21": 10.16},
-  {"name": "Cantabria", "lat": 43.4623, "lon": -3.8099, "gdp": 16777, "gdp_pc": 29459, "gdp2019": 14274, "gdp2020": 12991, "gdp2021": 14207, "gdp2022": 15540, "gdp2023": 16777, "growth19_23": 17.54, "growth20_21": 9.36},
-  {"name": "Castile and León", "lat": 42.6, "lon": -5.57, "gdp": 70876, "gdp_pc": 29963, "gdp2019": 59649, "gdp2020": 54795, "gdp2021": 59466, "gdp2022": 65121, "gdp2023": 70876, "growth19_23": 18.82, "growth20_21": 8.52},
-  {"name": "Castilla-La Mancha", "lat": 39.8636, "lon": -4.0273, "gdp": 53929, "gdp_pc": 26613, "gdp2019": 43393, "gdp2020": 40254, "gdp2021": 44124, "gdp2022": 49676, "gdp2023": 53929, "growth19_23": 24.28, "growth20_21": 9.61},
-  {"name": "Catalonia", "lat": 41.3874, "lon": 2.1686, "gdp": 281845, "gdp_pc": 35325, "gdp2019": 240166, "gdp2020": 214857, "gdp2021": 234820, "gdp2022": 258686, "gdp2023": 281845, "growth19_23": 17.35, "growth20_21": 9.29},
-  {"name": "Extremadura", "lat": 38.986, "lon": -6.095, "gdp": 24870, "gdp_pc": 24692, "gdp2019": 21166, "gdp2020": 19497, "gdp2021": 21552, "gdp2022": 23141, "gdp2023": 24870, "growth19_23": 17.5, "growth20_21": 10.54},
-  {"name": "Galicia", "lat": 42.5751, "lon": -8.1339, "gdp": 77356, "gdp_pc": 28798, "gdp2019": 64502, "gdp2020": 59007, "gdp2021": 64387, "gdp2022": 71366, "gdp2023": 77356, "growth19_23": 19.93, "growth20_21": 9.12},
-  {"name": "Madrid", "lat": 40.4168, "lon": -3.7038, "gdp": 293069, "gdp_pc": 42198, "gdp2019": 243889, "gdp2020": 221062, "gdp2021": 239838, "gdp2022": 267579, "gdp2023": 293069, "growth19_23": 20.16, "growth20_21": 8.49},
-  {"name": "Murcia", "lat": 37.9922, "lon": -1.1307, "gdp": 40386, "gdp_pc": 26350, "gdp2019": 33001, "gdp2020": 30440, "gdp2021": 33604, "gdp2022": 37493, "gdp2023": 40386, "growth19_23": 22.38, "growth20_21": 10.39},
-  {"name": "Navarre", "lat": 42.8125, "lon": -1.6458, "gdp": 25041, "gdp_pc": 37088, "gdp2019": 21070, "gdp2020": 19161, "gdp2021": 20821, "gdp2022": 23211, "gdp2023": 25041, "growth19_23": 18.85, "growth20_21": 8.66},
-  {"name": "Valencian Community", "lat": 39.484, "lon": -0.7542, "gdp": 139420, "gdp_pc": 26453, "gdp2019": 116589, "gdp2020": 106067, "gdp2021": 116387, "gdp2022": 127590, "gdp2023": 139420, "growth19_23": 19.58, "growth20_21": 9.73},
-  {"name": "La Rioja", "lat": 42.465, "lon": -2.4487, "gdp": 10618, "gdp_pc": 33284, "gdp2019": 8890, "gdp2020": 8187, "gdp2021": 8736, "gdp2022": 9713, "gdp2023": 10618, "growth19_23": 19.44, "growth20_21": 6.71},
-  {"name": "Ceuta", "lat": 35.8898, "lon": -5.3213, "gdp": 1889, "gdp_pc": 23698, "gdp2019": 1660, "gdp2020": 1536, "gdp2021": 1634, "gdp2022": 1764, "gdp2023": 1889, "growth19_23": 13.8, "growth20_21": 6.38},
-  {"name": "Melilla", "lat": 35.2923, "lon": -2.9381, "gdp": 1750, "gdp_pc": 20479, "gdp2019": 1560, "gdp2020": 1452, "gdp2021": 1534, "gdp2022": 1654, "gdp2023": 1750, "growth19_23": 12.18, "growth20_21": 5.65}
+  {
+    "name": "Andalusia",
+    "lat": 37.3886,
+    "lon": -5.9823,
+    "gdp": 199952,
+    "gdp_pc": 23218,
+    "gdp2019": 166479,
+    "gdp2020": 150453,
+    "gdp2021": 166296,
+    "gdp2022": 183636,
+    "gdp2023": 199952,
+    "growth19_23": 20.11,
+    "growth20_21": 10.53,
+    "rd_pc": 264.8,
+    "rd_growth": 20.9
+  },
+  {
+    "name": "Aragon",
+    "lat": 41.6561,
+    "lon": -0.8773,
+    "gdp": 46674,
+    "gdp_pc": 34658,
+    "gdp2019": 38465,
+    "gdp2020": 35956,
+    "gdp2021": 38782,
+    "gdp2022": 43454,
+    "gdp2023": 46674,
+    "growth19_23": 21.34,
+    "growth20_21": 7.86,
+    "rd_pc": 402.7,
+    "rd_growth": 21.6
+  },
+  {
+    "name": "Asturias",
+    "lat": 43.3614,
+    "lon": -5.8593,
+    "gdp": 28326,
+    "gdp_pc": 28177,
+    "gdp2019": 23667,
+    "gdp2020": 21376,
+    "gdp2021": 23618,
+    "gdp2022": 26481,
+    "gdp2023": 28326,
+    "growth19_23": 19.69,
+    "growth20_21": 10.49,
+    "rd_pc": 276.3,
+    "rd_growth": 28.1
+  },
+  {
+    "name": "Balearic Islands",
+    "lat": 39.5696,
+    "lon": 2.6502,
+    "gdp": 42084,
+    "gdp_pc": 34381,
+    "gdp2019": 34351,
+    "gdp2020": 26669,
+    "gdp2021": 30512,
+    "gdp2022": 37165,
+    "gdp2023": 42084,
+    "growth19_23": 22.51,
+    "growth20_21": 14.41,
+    "rd_pc": 163.1,
+    "rd_growth": 22.4
+  },
+  {
+    "name": "Basque Country",
+    "lat": 43.263,
+    "lon": -2.935,
+    "gdp": 87857,
+    "gdp_pc": 39547,
+    "gdp2019": 74000,
+    "gdp2020": 66673,
+    "gdp2021": 72513,
+    "gdp2022": 80481,
+    "gdp2023": 87857,
+    "growth19_23": 18.73,
+    "growth20_21": 8.76,
+    "rd_pc": 925.5,
+    "rd_growth": 16.3
+  },
+  {
+    "name": "Canary Islands",
+    "lat": 28.1235,
+    "lon": -15.4363,
+    "gdp": 54194,
+    "gdp_pc": 24527,
+    "gdp2019": 45767,
+    "gdp2020": 37587,
+    "gdp2021": 41407,
+    "gdp2022": 48551,
+    "gdp2023": 54194,
+    "growth19_23": 18.41,
+    "growth20_21": 10.16,
+    "rd_pc": 138.1,
+    "rd_growth": 13.9
+  },
+  {
+    "name": "Cantabria",
+    "lat": 43.4623,
+    "lon": -3.8099,
+    "gdp": 16777,
+    "gdp_pc": 29459,
+    "gdp2019": 14274,
+    "gdp2020": 12991,
+    "gdp2021": 14207,
+    "gdp2022": 15540,
+    "gdp2023": 16777,
+    "growth19_23": 17.54,
+    "growth20_21": 9.36,
+    "rd_pc": 273.1,
+    "rd_growth": 16.6
+  },
+  {
+    "name": "Castile and León",
+    "lat": 42.6,
+    "lon": -5.57,
+    "gdp": 70876,
+    "gdp_pc": 29963,
+    "gdp2019": 59649,
+    "gdp2020": 54795,
+    "gdp2021": 59466,
+    "gdp2022": 65121,
+    "gdp2023": 70876,
+    "growth19_23": 18.82,
+    "growth20_21": 8.52,
+    "rd_pc": 403.0,
+    "rd_growth": 11.1
+  },
+  {
+    "name": "Castilla-La Mancha",
+    "lat": 39.8636,
+    "lon": -4.0273,
+    "gdp": 53929,
+    "gdp_pc": 26613,
+    "gdp2019": 43393,
+    "gdp2020": 40254,
+    "gdp2021": 44124,
+    "gdp2022": 49676,
+    "gdp2023": 53929,
+    "growth19_23": 24.28,
+    "growth20_21": 9.61,
+    "rd_pc": 158.3,
+    "rd_growth": 6.0
+  },
+  {
+    "name": "Catalonia",
+    "lat": 41.3874,
+    "lon": 2.1686,
+    "gdp": 281845,
+    "gdp_pc": 35325,
+    "gdp2019": 240166,
+    "gdp2020": 214857,
+    "gdp2021": 234820,
+    "gdp2022": 258686,
+    "gdp2023": 281845,
+    "growth19_23": 17.35,
+    "growth20_21": 9.29,
+    "rd_pc": 668.7,
+    "rd_growth": 11.1
+  },
+  {
+    "name": "Extremadura",
+    "lat": 38.986,
+    "lon": -6.095,
+    "gdp": 24870,
+    "gdp_pc": 24692,
+    "gdp2019": 21166,
+    "gdp2020": 19497,
+    "gdp2021": 21552,
+    "gdp2022": 23141,
+    "gdp2023": 24870,
+    "growth19_23": 17.5,
+    "growth20_21": 10.54,
+    "rd_pc": 170.2,
+    "rd_growth": 13.5
+  },
+  {
+    "name": "Galicia",
+    "lat": 42.5751,
+    "lon": -8.1339,
+    "gdp": 77356,
+    "gdp_pc": 28798,
+    "gdp2019": 64502,
+    "gdp2020": 59007,
+    "gdp2021": 64387,
+    "gdp2022": 71366,
+    "gdp2023": 77356,
+    "growth19_23": 19.93,
+    "growth20_21": 9.12,
+    "rd_pc": 355.7,
+    "rd_growth": 28.2
+  },
+  {
+    "name": "Madrid",
+    "lat": 40.4168,
+    "lon": -3.7038,
+    "gdp": 293069,
+    "gdp_pc": 42198,
+    "gdp2019": 243889,
+    "gdp2020": 221062,
+    "gdp2021": 239838,
+    "gdp2022": 267579,
+    "gdp2023": 293069,
+    "growth19_23": 20.16,
+    "growth20_21": 8.49,
+    "rd_pc": 862.3,
+    "rd_growth": 17.7
+  },
+  {
+    "name": "Murcia",
+    "lat": 37.9922,
+    "lon": -1.1307,
+    "gdp": 40386,
+    "gdp_pc": 26350,
+    "gdp2019": 33001,
+    "gdp2020": 30440,
+    "gdp2021": 33604,
+    "gdp2022": 37493,
+    "gdp2023": 40386,
+    "growth19_23": 22.38,
+    "growth20_21": 10.39,
+    "rd_pc": 271.6,
+    "rd_growth": 10.1
+  },
+  {
+    "name": "Navarre",
+    "lat": 42.8125,
+    "lon": -1.6458,
+    "gdp": 25041,
+    "gdp_pc": 37088,
+    "gdp2019": 21070,
+    "gdp2020": 19161,
+    "gdp2021": 20821,
+    "gdp2022": 23211,
+    "gdp2023": 25041,
+    "growth19_23": 18.85,
+    "growth20_21": 8.66,
+    "rd_pc": 658.5,
+    "rd_growth": 9.0
+  },
+  {
+    "name": "Valencian Community",
+    "lat": 39.484,
+    "lon": -0.7542,
+    "gdp": 139420,
+    "gdp_pc": 26453,
+    "gdp2019": 116589,
+    "gdp2020": 106067,
+    "gdp2021": 116387,
+    "gdp2022": 127590,
+    "gdp2023": 139420,
+    "growth19_23": 19.58,
+    "growth20_21": 9.73,
+    "rd_pc": 321.9,
+    "rd_growth": 15.3
+  },
+  {
+    "name": "La Rioja",
+    "lat": 42.465,
+    "lon": -2.4487,
+    "gdp": 10618,
+    "gdp_pc": 33284,
+    "gdp2019": 8890,
+    "gdp2020": 8187,
+    "gdp2021": 8736,
+    "gdp2022": 9713,
+    "gdp2023": 10618,
+    "growth19_23": 19.44,
+    "growth20_21": 6.71,
+    "rd_pc": 299.1,
+    "rd_growth": 17.7
+  },
+  {
+    "name": "Ceuta",
+    "lat": 35.8898,
+    "lon": -5.3213,
+    "gdp": 1889,
+    "gdp_pc": 23698,
+    "gdp2019": 1660,
+    "gdp2020": 1536,
+    "gdp2021": 1634,
+    "gdp2022": 1764,
+    "gdp2023": 1889,
+    "growth19_23": 13.8,
+    "growth20_21": 6.38,
+    "rd_pc": 51.1,
+    "rd_growth": 6.5
+  },
+  {
+    "name": "Melilla",
+    "lat": 35.2923,
+    "lon": -2.9381,
+    "gdp": 1750,
+    "gdp_pc": 20479,
+    "gdp2019": 1560,
+    "gdp2020": 1452,
+    "gdp2021": 1534,
+    "gdp2022": 1654,
+    "gdp2023": 1750,
+    "growth19_23": 12.18,
+    "growth20_21": 5.65,
+    "rd_pc": 73.7,
+    "rd_growth": 4.2
+  }
 ];
-        const metricOptions = [["gdp", "GDP 2023 (M€)", "M€"], ["gdp_pc", "GDP per Capita 2023 (€)", "€"], ["growth19_23", "GDP Growth 2019-23 (%)", "%"], ["growth20_21", "GDP Growth 2020-21 (%)", "%"]];
+        const metricOptions = [["gdp", "GDP 2023 (M€)", "M€"], ["gdp_pc", "GDP per Capita 2023 (€)", "€"], ["growth19_23", "GDP Growth 2019-23 (%)", "%"], ["growth20_21", "GDP Growth 2020-21 (%)", "%"], ["rd_pc", "R&D per Capita 2023 (€)", "€"], ["rd_growth", "R&D Expenditure Growth 2023 vs 2022 (%)", "%"]];
         const map = L.map('map').setView([40.0, -3.7], 6);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org">OpenStreetMap</a> contributors'
@@ -73,25 +358,37 @@
             const insightsDiv = document.getElementById('insights');
             if(metricKey === 'growth19_23') {
                 insightsDiv.innerHTML = '<b>Insights:</b><br>' +
-                '• Castile-La Mancha shows the highest 5-year GDP growth (~24%).<br>' +
-                '• Balearic Islands and Murcia also exceed 22% growth, reflecting tourism recovery and economic expansion.<br>' +
-                '• Ceuta and Melilla grew less than 14%, indicating slower post-pandemic recovery.<br>' +
+                '\u2022 Castile-La Mancha shows the highest 5-year GDP growth (~24%).<br>' +
+                '\u2022 Balearic Islands and Murcia also exceed 22% growth, reflecting tourism recovery and economic expansion.<br>' +
+                '\u2022 Ceuta and Melilla grew less than 14%, indicating slower post-pandemic recovery.<br>' +
                 'Hover over circles for exact values.';
             } else if(metricKey === 'growth20_21') {
                 insightsDiv.innerHTML = '<b>Insights:</b><br>' +
-                '• 2020-21 growth illustrates pandemic rebound: Balearic Islands experienced over 14% growth as tourism returned.<br>' +
-                '• Extremadura and Andalusia show double-digit growth, while Ceuta and Melilla lag behind.<br>' +
-                '• Use this metric to see how strongly each region recovered in the year after the pandemic slump.';
+                '\u2022 2020-21 growth illustrates pandemic rebound: Balearic Islands experienced over 14% growth as tourism returned.<br>' +
+                '\u2022 Extremadura and Andalusia show double-digit growth, while Ceuta and Melilla lag behind.<br>' +
+                '\u2022 Use this metric to see how strongly each region recovered in the year after the pandemic slump.';
             } else if(metricKey === 'gdp_pc') {
                 insightsDiv.innerHTML = '<b>Insights:</b><br>' +
-                '• Madrid and the Basque Country have the highest GDP per capita, exceeding €39,000.<br>' +
-                '• Southern regions like Andalusia, Extremadura and the Canary Islands have much lower GDP per capita.<br>' +
-                '• Wealth disparities persist across Spain, with a clear north-south divide.';
+                '\u2022 Madrid and the Basque Country have the highest GDP per capita, exceeding \u20ac39,000.<br>' +
+                '\u2022 Southern regions like Andalusia, Extremadura and the Canary Islands have much lower GDP per capita.<br>' +
+                '\u2022 Wealth disparities persist across Spain, with a clear north-south divide.';
+            } else if(metricKey === 'rd_pc') {
+                insightsDiv.innerHTML = '<b>Insights:</b><br>' +
+                '\u2022 The Basque Country and Madrid lead R&D spending per person, with over \u20ac860 per inhabitant.<br>' +
+                '\u2022 High R&D per capita reflects strong investment in innovation and science in northern regions.<br>' +
+                '\u2022 Ceuta, Melilla and the Canary Islands invest the least in R&D per inhabitant.<br>' +
+                'Hover over circles for exact values.';
+            } else if(metricKey === 'rd_growth') {
+                insightsDiv.innerHTML = '<b>Insights:</b><br>' +
+                '\u2022 Galicia and Asturias saw the largest increases in R&D expenditure in 2023, both above 28%.<br>' +
+                '\u2022 Balearic Islands also recorded strong growth (~22%).<br>' +
+                '\u2022 Melilla, Castilla-La Mancha and Ceuta posted growth below 7%, signalling slower research investment.<br>' +
+                'This metric shows momentum in innovation investment across regions.';
             } else {
                 insightsDiv.innerHTML = '<b>Insights:</b><br>' +
-                '• Madrid and Catalonia dominate in total GDP due to large populations and diversified economies.<br>' +
-                '• Smaller regions like La Rioja, Ceuta and Melilla contribute a fraction of national output.<br>' +
-                '• Select other metrics for more nuanced comparisons.';
+                '\u2022 Madrid and Catalonia dominate in total GDP due to large populations and diversified economies.<br>' +
+                '\u2022 Smaller regions like La Rioja, Ceuta and Melilla contribute a fraction of national output.<br>' +
+                '\u2022 Select other metrics for more nuanced comparisons.';
             }
         }
         function drawMap() {
@@ -99,13 +396,13 @@
             markers.forEach(m => m.remove());
             markers = [];
             if(heatLayer) { heatLayer.remove(); heatLayer = null; }
-            if(metricKey === 'growth19_23') {
-                const heatData = data.map(d => [d.lat, d.lon, d.growth19_23 / 30]);
+            if(metricKey === 'growth19_23' || metricKey === 'rd_growth') {
+                const heatData = data.map(d => [d.lat, d.lon, d[metricKey] / 30]);
                 heatLayer = L.heatLayer(heatData, {
                     radius: 25,
                     blur: 15,
                     maxZoom: 7,
-                    gradient: { 0.0: 'blue', 0.5: 'lime', 1.0: 'red' }
+                    gradient: { 0.0: 'navy', 0.33: 'royalblue', 0.66: 'gold', 1.0: 'red' }
                 }).addTo(map);
             }
             data.forEach(item => {
@@ -116,7 +413,10 @@
                     fillOpacity: 0.7,
                     weight: 1
                 }).addTo(map);
-                const suffix = metricKey === 'gdp' ? 'M€' : (metricKey === 'gdp_pc' ? '€' : '%');
+                let suffix;
+                if(metricKey === 'gdp') { suffix = 'M€'; }
+                else if(metricKey === 'gdp_pc' || metricKey === 'rd_pc') { suffix = '€'; }
+                else { suffix = '%'; }
                 const displayValue = value.toLocaleString(undefined, { maximumFractionDigits: 2 });
                 const metricLabel = metricOptions.find(o => o[0] === metricKey)[1];
                 circle.bindPopup(`<strong>${item.name}</strong><br>${metricLabel}: ${displayValue} ${suffix}`);
